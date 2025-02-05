@@ -1,128 +1,62 @@
+let clients = JSON.parse(localStorage.getItem("clients")) || [
+    { id: 1, nom: 'Aliou', email: 'aliou@example.com', telephone: '77 123 4567', categorie: 'Fidèle' },
+    { id: 2, nom: 'Moussa', email: 'moussa@example.com', telephone: '76 987 6543', categorie: 'Solvable' },
+    { id: 3, nom: 'Awa', email: 'awa@example.com', telephone: '70 654 3210', categorie: 'Nouveau' },
+    { id: 4, nom: 'Fatou', email: 'fatou@example.com', telephone: '78 321 9876', categorie: 'Non Solvable' },
+    { id: 5, nom: 'Bamba', email: 'bamba@example.com', telephone: '77 555 8888', categorie: 'Fidèle' }
+];
 
+// Fonction pour afficher la liste des clients
+function afficherClients() {
+    const clientTable = document.getElementById("clientTable");
+    if (!clientTable) return;
+    clientTable.innerHTML = ""; // Réinitialisation de la table
 
-
-
-function toggleForm() {
-    document.getElementById('form-container').classList.toggle('d-none');
-}
-
-// Fonction pour ajouter un client
-function addClient() {
-    const nom = document.getElementById('nom').value;
-    const prenom = document.getElementById('prenom').value;
-    const photo = document.getElementById('photo').value;
-    const adresse = document.getElementById('adresse').value;
-    const telephone = document.getElementById('telephone').value;
-    const email = document.getElementById('email').value;
-
-    if (nom && prenom && photo && adresse && telephone && email) {
-        const client = { nom, prenom, photo, adresse, telephone, email };
-// Charger la liste des clients au démarrage
-document.addEventListener('DOMContentLoaded', displayClients);
-
-// Fonction pour afficher les clients
-function displayClients() {
-    const clients = JSON.parse(localStorage.getItem('clients')) || [];
-    const tableBody = document.getElementById('client-list');
-    tableBody.innerHTML = "";
-
-    clients.forEach((client, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
+    clients.forEach(client => {
+        const row = `<tr>
             <td>${client.nom}</td>
-            <td>${client.prenom}</td>
-            <td><img src="${client.photo || 'https://via.placeholder.com/50'}" width="50"></td>
-            <td>${client.adresse}</td>
-            <td>${client.telephone}</td>
             <td>${client.email}</td>
-            <td>
-                <button class="btn btn-danger btn-sm" onclick="deleteClient(${index})">Supprimer</button>
-            </td>
-        `;
-        tableBody.appendChild(row);
+            <td>${client.telephone}</td>
+            <td>${client.categorie}</td>
+        </tr>`;
+        clientTable.innerHTML += row;
     });
 }
 
+// Fonction pour filtrer les clients
+function filtrerClients() {
+    const categorieChoisie = document.getElementById("categorieFilter").value;
+    const clientsFiltrés = categorieChoisie ? clients.filter(client => client.categorie === categorieChoisie) : clients;
+    afficherClients(clientsFiltrés);
+}
+
 // Fonction pour ajouter un client
-function addClient() {
-    const nom = document.getElementById('nom').value;
-    const prenom = document.getElementById('prenom').value;
-    const photo = document.getElementById('photo').value || "https://via.placeholder.com/50";
-    const adresse = document.getElementById('adresse').value;
-    const telephone = document.getElementById('telephone').value;
-    const email = document.getElementById('email').value;
+function ajouterClient() {
+    const nom = document.getElementById("nom").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const telephone = document.getElementById("telephone").value.trim();
+    const categorie = document.getElementById("categorie").value;
 
-    if (nom && prenom && adresse && telephone && email) {
-        const client = { nom, prenom, photo, adresse, telephone, email };
-        const clients = JSON.parse(localStorage.getItem('clients')) || [];
-        clients.push(client);
-        localStorage.setItem('clients', JSON.stringify(clients));
-
-        displayClients(); // Mettre à jour l'affichage
-        document.getElementById('clientForm').reset(); // Réinitialiser le formulaire
-        document.querySelector('.btn-close').click(); // Fermer le modal
-    } else {
-        alert('Tous les champs sont obligatoires');
+    if (!nom || !email || !telephone || !categorie) {
+        alert("Tous les champs sont obligatoires !");
+        return;
     }
-}
 
-
-function deleteClient(index) {
-    let clients = JSON.parse(localStorage.getItem('clients')) || [];
-    clients.splice(index, 1);
-    localStorage.setItem('clients', JSON.stringify(clients));
-    displayClients();
-}
-
-       
-        const clients = JSON.parse(localStorage.getItem('clients')) || [];
-        clients.push(client);
-
-        localStorage.setItem('clients', JSON.stringify(clients));
-
-       
-        displayClients();
-
-       
-        document.getElementById('clientForm').reset();
-
-        // Cacher le formulaire
-        toggleForm();
-    } else {
-        alert('Tous les champs sont obligatoires');
+    if (clients.some(client => client.email === email)) {
+        alert("Cet email est déjà utilisé !");
+        return;
     }
+    if (clients.some(client => client.telephone === telephone)) {
+        alert("Ce numéro de téléphone est déjà utilisé !");
+        return;
+    }
+
+    const nouveauClient = { id: clients.length + 1, nom, email, telephone, categorie };
+    clients.push(nouveauClient);
+
+    // Sauvegarde des clients en localStorage
+    localStorage.setItem("clients", JSON.stringify(clients));
+
+    alert("Client ajouté avec succès !");
+    window.location.href = "index.html"; // Redirection vers la liste des clients
 }
-
-// Fonction pour afficher la liste des clients depuis localStorage
-function displayClients() {
-    const clients = JSON.parse(localStorage.getItem('clients')) || [];
-    const tableBody = document.getElementById('client-list');
-    tableBody.innerHTML = ""; // Efface le contenu avant de le recharger
-
-    clients.forEach((client, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${client.nom}</td>
-            <td>${client.prenom}</td>
-            <td><img src="${client.photo}" alt="Photo" width="50"></td>
-            <td>${client.adresse}</td>
-            <td>${client.telephone}</td>
-            <td>${client.email}</td>
-            <td>
-                <button class="btn btn-sm btn-danger" onclick="deleteClient(${index})">Supprimer</button>
-            </td>
-        `;
-        tableBody.appendChild(row);
-    });
-}
-
-// Fonction pour supprimer un client
-function deleteClient(index) {
-    let clients = JSON.parse(localStorage.getItem('clients')) || [];
-    clients.splice(index, 1); // Supprimer l'élément du tableau
-    localStorage.setItem('clients', JSON.stringify(clients));
-    displayClients(); // Recharger la liste des clients
-}
-
-// Charger la liste des clients au démarrage
-document.addEventListener('DOMContentLoaded', displayClients);
