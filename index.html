@@ -1,18 +1,21 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion de Dettes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="bg-light">
-    <div class="container my-5">
-        <h1 class="text-center text-warning">Gestion de dettes</h1>
-        <button class="btn btn-primary my-3" data-bs-toggle="modal" data-bs-target="#clientModal">Ajouter un Client</button>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center text-warning mb-4">Gestion de dettes</h1>
+        <h3 class="text-center mb-4">Liste des clients</h3>
 
-        <!-- Tableau des Clients -->
-        <table class="table table-striped">
+        <!-- Bouton pour ouvrir la modale -->
+        <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#clientModal">Ajouter</button>
+
+        <!-- Tableau pour la liste des clients -->
+        <table class="table table-bordered table-striped">
             <thead class="table-warning">
                 <tr>
                     <th>Nom</th>
@@ -24,50 +27,49 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody id="client-list">
-                <!-- Les clients seront ajoutés ici -->
+            <tbody id="clientTableBody">
+                <!-- Les lignes des clients seront ajoutées ici dynamiquement -->
             </tbody>
         </table>
     </div>
 
-    <!-- Modal pour ajouter un client -->
-    <div class="modal fade" id="clientModal" tabindex="-1">
+    <!-- Modale pour ajouter/modifier un client -->
+    <div class="modal fade" id="clientModal" tabindex="-1" aria-labelledby="clientModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Ajouter un Client</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <h5 class="modal-title" id="clientModalLabel">Ajouter un Client</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <!-- Formulaire inclus dans la modale -->
                     <form id="clientForm">
-                        <div class="mb-2">
+                        <div class="mb-3">
                             <label for="nom" class="form-label">Nom</label>
                             <input type="text" class="form-control" id="nom" required>
                         </div>
-                        <div class="mb-2">
+                        <div class="mb-3">
                             <label for="prenom" class="form-label">Prénom</label>
                             <input type="text" class="form-control" id="prenom" required>
                         </div>
-                        <div class="mb-2">
-                            <label for="photo" class="form-label">Photo (URL)</label>
-                            <input type="text" class="form-control" id="photo">
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Photo</label>
+                            <input type="file" class="form-control" id="image">
                         </div>
-                        <div class="mb-2">
+                        <div class="mb-3">
                             <label for="adresse" class="form-label">Adresse</label>
                             <input type="text" class="form-control" id="adresse" required>
                         </div>
-                        <div class="mb-2">
+                        <div class="mb-3">
                             <label for="telephone" class="form-label">Téléphone</label>
                             <input type="text" class="form-control" id="telephone" required>
                         </div>
-                        <div class="mb-2">
+                        <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" id="email" required>
                         </div>
-                        <div class="d-flex justify-content-end">
-                            <button type="button" class="btn btn-success me-2" onclick="addClient()">Valider</button>
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Annuler</button>
-                        </div>
+                        <button type="submit" class="btn btn-success">Valider</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Annuler</button>
                     </form>
                 </div>
             </div>
